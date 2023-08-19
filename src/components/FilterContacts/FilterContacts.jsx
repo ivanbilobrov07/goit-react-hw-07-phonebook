@@ -1,18 +1,18 @@
 import { useDispatch, useSelector } from 'react-redux';
 
-import { selectFilter } from 'redux/selectors';
+import { selectFilterByQuery } from 'redux/selectors';
 
 import { FilterInput, FilterFormGroup } from './FilterContacts.styled';
-import { setFilter } from 'redux/filter/filterSlice';
+import { setFilterQuery } from 'redux/filter/filterSlice';
 
 export const FilterContacts = () => {
-  const filter = useSelector(selectFilter);
+  const filter = useSelector(selectFilterByQuery);
   const dispatch = useDispatch();
 
   const handleFilterValueInput = ({ target: { value } }) => {
     value = value.toLowerCase();
 
-    dispatch(setFilter(value));
+    dispatch(setFilterQuery(value));
   };
 
   return (

@@ -1,3 +1,6 @@
+import { useSelector } from 'react-redux';
+
+import { selectContacts } from 'redux/selectors';
 import { Formik, Form } from 'formik';
 import { object, string } from 'yup';
 
@@ -15,12 +18,9 @@ const nameExpression = RegExp(
   "^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
 );
 
-export const ContactForm = ({
-  findContactByName,
-  findContactByNumber,
-  initialValues,
-  handleContactChange,
-}) => {
+export const ContactForm = ({ initialValues, handleContactChange }) => {
+  const contacts = useSelector(selectContacts);
+
   const contactSchema = object({
     name: string()
       .required()
@@ -32,7 +32,12 @@ export const ContactForm = ({
       .test(
         'Name was entered successfully',
         'This name is already taken',
-        value => !findContactByName(value)
+        value => {
+          if (initialValues) {
+            return !findContactByNameAndId(value);
+          }
+          return !findContactByName(value);
+        }
       ),
     number: string()
       .required()
@@ -44,12 +49,37 @@ export const ContactForm = ({
       .test(
         'Number was entered successfully',
         'This number is already taken',
-        value => !findContactByNumber(value)
+        value => {
+          if (initialValues) {
+            return !findContactByNumberAndId(value);
+          }
+          return !findContactByNumber(value);
+        }
       ),
   });
 
   const handleFormSubmit = values => {
     handleContactChange(values);
+  };
+
+  const findContactByName = nameValue => {
+    console.log(contacts);
+    return contacts?.find(({ name }) => name === nameValue);
+  };
+
+  const findContactByNumber = numberValue =>
+    contacts?.find(({ number }) => numberValue === number);
+
+  const findContactByNameAndId = nameValue => {
+    return contacts?.find(contact => {
+      return nameValue === contact.name && contact.id !== initialValues.id;
+    });
+  };
+
+  const findContactByNumberAndId = numberValue => {
+    return contacts?.find(contact => {
+      return numberValue === contact.number && contact.id !== initialValues.id;
+    });
   };
 
   return (

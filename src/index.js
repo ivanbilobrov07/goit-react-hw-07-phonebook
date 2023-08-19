@@ -8,13 +8,16 @@ import { theme } from './constants';
 
 import { App } from 'components/App';
 import './index.css';
+import { BrowserRouter } from 'react-router-dom';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </ThemeProvider>
+    <BrowserRouter basename="goit-react-hw-07-phonebook">
+      <ThemeProvider theme={theme}>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </ThemeProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );

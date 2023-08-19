@@ -20,6 +20,10 @@ ol {
   list-style: none;
 }
 
+a {
+  text-decoration: none;
+}
+
 body,
 h1,
 h2,

@@ -1,9 +1,7 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
-  margin: 0 auto;
-  max-width: 1220px;
-  border: 1px solid ${({ theme }) => theme.colors.blue_text};
+export const StyledSection = styled.section`
+  padding: 100px 0;
 `;
 
 export const Title = styled.h1`
@@ -12,4 +10,10 @@ export const Title = styled.h1`
   text-align: center;
   background-color: ${({ theme }) => theme.colors.blue_background};
   color: ${({ theme }) => theme.colors.blue_text};
+`;
+
+export const Wrapper = styled.div`
+  max-width: 1220px;
+  margin: 0 auto;
+  border: 1px solid ${({ theme }) => theme.colors.blue_text};
 `;
