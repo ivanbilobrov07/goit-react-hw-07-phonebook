@@ -12,7 +12,9 @@ import { ContactItem } from 'components/ContactItemRTK';
 import { Message } from 'components/Message';
 
 export const ContactList = () => {
-  const { data: contacts, isFetching } = useGetContactsQuery();
+  const { data: contacts, isFetching } = useGetContactsQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
   const option = useSelector(selectFilterByOption);
   const query = useSelector(selectFilterByQuery);
 
