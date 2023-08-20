@@ -5,7 +5,7 @@ import { selectError, selectIsLoading } from 'redux/selectors';
 import { addContact, getContacts } from 'redux/contacts/contactsApiThunk';
 import { errorNotify } from 'utils';
 
-import { ContactForm } from 'components/ContactForm';
+import { ContactForm } from 'components/ContactFormThunk';
 import { Controlls } from 'components/Controlls';
 import { Modal } from 'components/Modal';
 import { FormModal } from 'components/FormModal';

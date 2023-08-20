@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import {
   useAddContactMutation,
@@ -6,7 +6,7 @@ import {
 } from 'redux/contacts/contactsApiRTK';
 import { errorNotify, successNotify } from 'utils';
 
-import { ContactForm } from 'components/ContactForm';
+import { ContactForm } from 'components/ContactFormRTK';
 import { ContactList } from 'components/ContactListRTK';
 import { Controlls } from 'components/Controlls';
 import { FormModal } from 'components/FormModal';
@@ -15,27 +15,20 @@ import { Modal } from 'components/Modal';
 import { Spinner } from 'components/Spinner';
 
 export const Phonebook = () => {
-  const [addContact, addContactData] = useAddContactMutation();
+  const [addContact] = useAddContactMutation();
   const { isLoading, isError: isErrorInGetting } = useGetContactsQuery();
 
   const [isModalShown, setIsModalShown] = useState(false);
 
-  useEffect(() => {
-    if (addContactData.isError) {
-      errorNotify('Something went wrong with adding this contact');
-    }
-  }, [addContactData.isError]);
+  const handleAddContact = async data => {
+    const response = await addContact(data);
+    const isSuccess = !response.error;
 
-  useEffect(() => {
-    if (addContactData.isSuccess) {
-      successNotify(
-        `New contact "${addContactData.data.name}" was successfully added`
-      );
-    }
-  }, [addContactData, addContactData.isSuccess]);
-
-  const handleAddContact = data => {
-    addContact(data);
+    isSuccess
+      ? successNotify(
+          `New contact "${response.data.name}" was successfully added`
+        )
+      : errorNotify('Something went wrong with adding this contact');
     toggleModal();
   };
 

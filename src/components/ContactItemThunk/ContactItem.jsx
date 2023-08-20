@@ -8,7 +8,7 @@ import { TableDescrCell } from './ContactItem.styled';
 import { MdDelete } from 'react-icons/md';
 import { FiEdit } from 'react-icons/fi';
 import { FormModal } from 'components/FormModal';
-import { ContactForm } from 'components/ContactForm';
+import { ContactForm } from 'components/ContactFormThunk';
 import { DeleteModal } from 'components/DeleteModal';
 
 export const ContactItem = ({ name, id, number }) => {

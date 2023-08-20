@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   useEditContactMutation,
   useRemoveContactMutation,
@@ -9,7 +9,7 @@ import { TableDescrCell } from './ContactItem.styled';
 import { MdDelete } from 'react-icons/md';
 import { FiEdit } from 'react-icons/fi';
 import { FormModal } from 'components/FormModal';
-import { ContactForm } from 'components/ContactForm';
+import { ContactForm } from 'components/ContactFormRTK';
 import { Spinner } from 'components/Spinner';
 import { DeleteModal } from 'components/DeleteModal';
 import { errorNotify, successNotify } from 'utils';
@@ -21,52 +21,33 @@ export const ContactItem = ({ name, id, number }) => {
   const [isDeleteModalShown, setIsDeleteModalShown] = useState(false);
   const [isEditModalShown, setIsEditModalShown] = useState(false);
 
-  useEffect(() => {
-    const isError = editContactData.isError || removeContactData.isError;
-
-    if (!isError) {
-      return;
-    } else if (editContactData.isError) {
-      errorNotify('Something went wrong with editing this contact');
-    } else if (removeContactData.isError) {
-      errorNotify('Something went wrong with deleting this contact');
-    }
-  }, [editContactData.isError, removeContactData.isError]);
-
-  useEffect(() => {
-    if (editContactData.isSuccess) {
-      successNotify(
-        `Contact "${editContactData.data.name}" was successfully edited`
-      );
-    } else if (removeContactData.isSuccess) {
-      successNotify(
-        `Contact "${removeContactData.data.name}" was successfully deleted`
-      );
-    }
-  }, [
-    editContactData.data?.name,
-    editContactData.isSuccess,
-    removeContactData.data?.name,
-    removeContactData.isSuccess,
-  ]);
-
   const closeModal = () => {
     setIsDeleteModalShown(false);
     setIsEditModalShown(false);
   };
 
-  const handleDeleteContact = () => {
-    removeContact(id);
+  const handleDeleteContact = async () => {
+    const response = await removeContact(id);
+    const isSuccess = !response.error;
+
+    isSuccess
+      ? successNotify(`Contact "${name}" was successfully deleted`)
+      : errorNotify('Something went wrong with deleting this contact');
     closeModal();
   };
 
-  const handleEditContact = data => {
+  const handleEditContact = async data => {
     if (name === data.name && number === data.number) {
       closeModal();
       return;
     }
 
-    editContact(data);
+    const response = await editContact(data);
+    const isSuccess = !response.error;
+
+    isSuccess
+      ? successNotify(`Contact "${name}" was successfully edited`)
+      : errorNotify('Something went wrong with editing this contact');
     closeModal();
   };
 

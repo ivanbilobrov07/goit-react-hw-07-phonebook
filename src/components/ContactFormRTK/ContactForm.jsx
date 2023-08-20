@@ -1,8 +1,6 @@
-import { useSelector } from 'react-redux';
-
-import { selectContacts } from 'redux/selectors';
 import { Formik, Form } from 'formik';
 import { object, string } from 'yup';
+import { useGetContactsQuery } from 'redux/contacts/contactsApiRTK';
 
 import { TextInput } from 'components/TextInput';
 import { FormButton } from './ContactForm.styled';
@@ -19,7 +17,7 @@ const nameExpression = RegExp(
 );
 
 export const ContactForm = ({ initialValues, handleContactChange }) => {
-  const contacts = useSelector(selectContacts);
+  const { data: contacts } = useGetContactsQuery();
 
   const contactSchema = object({
     name: string()
@@ -63,7 +61,6 @@ export const ContactForm = ({ initialValues, handleContactChange }) => {
   };
 
   const findContactByName = nameValue => {
-    console.log(contacts);
     return contacts?.find(({ name }) => name === nameValue);
   };
 
